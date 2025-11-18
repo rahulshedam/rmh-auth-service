@@ -1,0 +1,26 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/authdb
+    username: authuser
+    password: password
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+  jackson:
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: false
+
+jwt:
+  # Replace this with a secure 64+ byte value from your secrets manager in production
+  secret: A_Replace_With_AtLeast_64_Bytes_Of_Secure_Random_Characters_______________
+  accessTokenExpirationSeconds: 900   # 15 minutes
+  refreshTokenExpirationSeconds: 1209600  # 14 days
+logging:
+  level:
+    root: INFO
