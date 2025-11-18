@@ -3,18 +3,16 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/authdb
-    username: authuser
-    password: password
+    url: jdbc:postgresql://dpg-d4e6lr0gjchc73fb3ka0-a.singapore-postgres.render.com/rmh_auth_service
+    username: rmh_auth_service_user
+    password: kikAXpXXW0YOnfLbhttdSKH0gcL4H4AQ
   jpa:
     hibernate:
       ddl-auto: update
     properties:
       hibernate:
         format_sql: true
-  jackson:
-    serialization:
-      WRITE_DATES_AS_TIMESTAMPS: false
+  # Jackson serialization settings removed to avoid enum binding issues
 
 jwt:
   # Replace this with a secure 64+ byte value from your secrets manager in production
