@@ -2,10 +2,12 @@ server:
   port: 8080
 
 spring:
+  profiles:
+    active: prod
   datasource:
-    url: jdbc:postgresql://dpg-d4e6lr0gjchc73fb3ka0-a.singapore-postgres.render.com/rmh_auth_service
-    username: rmh_auth_service_user
-    password: kikAXpXXW0YOnfLbhttdSKH0gcL4H4AQ
+    url: jdbc:postgresql://host.docker.internal:5432/authdb
+    username: authuser
+    password: password
   jpa:
     hibernate:
       ddl-auto: update
@@ -25,10 +27,6 @@ logging:
 
 springdoc:
   api-docs:
-    path: /api-docs
-    groups:
-      enabled: true
+    enabled: false
   swagger-ui:
-    path: /swagger-ui.html
-    operations-sorter: method
-    tags-sorter: alpha
+    enabled: false

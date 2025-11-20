@@ -3,8 +3,10 @@ package com.rmh.auth.config;
 import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 @Configuration
+@Profile({"dev", "qa"})
 public class OpenApiConfig {
 
     @Bean
@@ -30,7 +32,7 @@ public class OpenApiConfig {
         return GroupedOpenApi.builder()
                 .group("health")
                 .packagesToScan("com.rmh.auth.controller")
-                .pathsToMatch("/actuator/health/**")
+                .pathsToMatch("/actuator/health")
                 .build();
     }
 }
