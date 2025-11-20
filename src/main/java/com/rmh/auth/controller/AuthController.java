@@ -16,27 +16,26 @@ public class AuthController {
     public AuthController(AuthService a){ this.authService = a; }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@Valid @RequestBody AuthRequest req){
+    public ResponseEntity<RegisterResponse> register(@Valid @RequestBody AuthRequest req){
         User u = authService.register(req.username(), req.password());
-        return ResponseEntity.ok(Map.of("id", u.getId(), "username", u.getUsername()));
+        return ResponseEntity.ok(new RegisterResponse(u.getId(), u.getUsername()));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@Valid @RequestBody AuthRequest req){
+    public ResponseEntity<TokenResponse> login(@Valid @RequestBody AuthRequest req){
         Map<String,String> tokens = authService.login(req.username(), req.password());
         return ResponseEntity.ok(new TokenResponse(tokens.get("access_token"), tokens.get("refresh_token"), "Bearer", 900));
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<?> refresh(@Valid @RequestBody RefreshRequest req){
+    public ResponseEntity<TokenResponse> refresh(@Valid @RequestBody RefreshRequest req){
         Map<String,String> tokens = authService.refreshToken(req.refreshToken());
         return ResponseEntity.ok(new TokenResponse(tokens.get("access_token"), tokens.get("refresh_token"), "Bearer", 900));
     }
 
     @PostMapping("/revoke")
-    public ResponseEntity<?> revoke(@RequestBody Map<String,String> body){
-        String username = body.get("username");
-        authService.revokeTokensForUser(username);
-        return ResponseEntity.ok(Map.of("revoked", true));
+    public ResponseEntity<RevokeResponse> revoke(@Valid @RequestBody RevokeRequest req){
+        authService.revokeTokensForUser(req.username());
+        return ResponseEntity.ok(new RevokeResponse(true));
     }
 }

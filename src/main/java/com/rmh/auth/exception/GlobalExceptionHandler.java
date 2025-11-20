@@ -1,5 +1,6 @@
 package com.rmh.auth.exception;
 
+import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.util.*;
 
+@Hidden
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 

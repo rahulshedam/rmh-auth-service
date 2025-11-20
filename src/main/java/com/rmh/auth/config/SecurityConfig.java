@@ -17,6 +17,12 @@ public class SecurityConfig {
     private final CustomUserDetailsService userDetailsService;
     private final JwtAuthenticationFilter jwtFilter;
 
+    private static final String[] SWAGGER_WHITELIST = {
+        "/swagger-ui/**",
+        "/swagger-ui.html",
+        "/api-docs/**"
+    };
+
     public SecurityConfig(CustomUserDetailsService uds, JwtAuthenticationFilter jf){
         this.userDetailsService = uds;
         this.jwtFilter = jf;
@@ -28,6 +34,7 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
+                .requestMatchers(SWAGGER_WHITELIST).permitAll()
                 .requestMatchers("/api/auth/**", "/actuator/health").permitAll()
                 .anyRequest().authenticated()
             )
