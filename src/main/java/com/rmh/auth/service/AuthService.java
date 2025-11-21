@@ -1,5 +1,6 @@
 package com.rmh.auth.service;
 
+import com.rmh.auth.exception.InvalidCredentialsException;
 import com.rmh.auth.model.User;
 import com.rmh.auth.model.RefreshToken;
 import com.rmh.auth.repository.UserRepository;
@@ -44,7 +45,7 @@ public class AuthService {
     public Map<String,String> login(String username, String password){
         User user = userRepo.findByUsername(username).orElseThrow(() -> new IllegalArgumentException("invalid credentials"));
         if (!passwordEncoder.matches(password, user.getPassword())){
-            throw new IllegalArgumentException("invalid credentials");
+            throw new InvalidCredentialsException("invalid credentials");
         }
         String access = jwtUtil.generateAccessToken(user.getUsername(), user.getRoles());
         // create refresh token
