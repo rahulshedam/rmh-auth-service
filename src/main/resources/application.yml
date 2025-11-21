@@ -1,13 +1,13 @@
 server:
-  port: 8080
+  port: 8084
 
 spring:
   profiles:
     active: prod
   datasource:
-    url: jdbc:postgresql://host.docker.internal:5432/authdb
-    username: authuser
-    password: password
+    url: jdbc:postgresql://localhost:5432/auth_service_db
+    username: postgres
+    password: 12345
   jpa:
     hibernate:
       ddl-auto: update
@@ -27,6 +27,6 @@ logging:
 
 springdoc:
   api-docs:
-    enabled: false
+    enabled: true
   swagger-ui:
-    enabled: false
+    enabled: true

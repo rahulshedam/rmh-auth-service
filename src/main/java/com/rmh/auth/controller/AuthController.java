@@ -3,6 +3,7 @@ package com.rmh.auth.controller;
 import com.rmh.auth.dto.*;
 import com.rmh.auth.service.AuthService;
 import com.rmh.auth.model.User;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
@@ -16,9 +17,12 @@ public class AuthController {
     public AuthController(AuthService a){ this.authService = a; }
 
     @PostMapping("/register")
-    public ResponseEntity<RegisterResponse> register(@Valid @RequestBody AuthRequest req){
+    public ResponseEntity<RegisterResponse> register(@Valid @RequestBody AuthRequest req) {
         User u = authService.register(req.username(), req.password());
-        return ResponseEntity.ok(new RegisterResponse(u.getId(), u.getUsername()));
+        RegisterResponse response = new RegisterResponse(u.getId(), u.getUsername());
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(response);
     }
 
     @PostMapping("/login")

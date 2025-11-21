@@ -20,9 +20,11 @@ public class SecurityConfig {
     private final boolean swaggerEnabled;
 
     private static final String[] SWAGGER_WHITELIST = {
-        "/swagger-ui/**",
-        "/swagger-ui.html",
-        "/api-docs/**"
+            "/swagger-ui/**",
+            "/swagger-ui.html",
+            "/swagger-ui/index.html",
+            "/v3/api-docs/**",
+            "/v3/api-docs/swagger-config"
     };
 
     public SecurityConfig(
@@ -45,7 +47,7 @@ public class SecurityConfig {
                     auth.requestMatchers(SWAGGER_WHITELIST).permitAll();
                 }
                 auth
-                    .requestMatchers("/api/auth/**", "/actuator/health").permitAll()
+                    .requestMatchers("/api/auth/**", "/actuator/health/**").permitAll()
                     .anyRequest().authenticated();
             })
             .authenticationProvider(daoAuthProvider())
