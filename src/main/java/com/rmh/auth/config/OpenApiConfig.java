@@ -1,13 +1,30 @@
 package com.rmh.auth.config;
 
+import io.swagger.v3.oas.models.Components;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
+import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 
 @Configuration
-@Profile({"dev", "qa"})
 public class OpenApiConfig {
+
+    private static final String BEARER_SCHEME = "bearerAuth";
+
+    @Bean
+    public OpenAPI authServiceOpenAPI() {
+        SecurityScheme bearerScheme = new SecurityScheme()
+                .type(SecurityScheme.Type.HTTP)
+                .scheme("bearer")
+                .bearerFormat("JWT")
+                .description("JWT token obtained from /api/auth/login endpoint");
+
+        return new OpenAPI()
+                .components(new Components().addSecuritySchemes(BEARER_SCHEME, bearerScheme))
+                .addSecurityItem(new SecurityRequirement().addList(BEARER_SCHEME));
+    }
 
     @Bean
     public GroupedOpenApi allAPIs() {
@@ -33,6 +50,15 @@ public class OpenApiConfig {
                 .group("health")
                 .packagesToScan("com.rmh.auth.controller")
                 .pathsToMatch("/actuator/health")
+                .build();
+    }
+
+    @Bean
+    public GroupedOpenApi userControllerAPIs() {
+        return GroupedOpenApi.builder()
+                .group("users")
+                .packagesToScan("com.rmh.auth.controller")
+                .pathsToMatch("/api/users/**")
                 .build();
     }
 }

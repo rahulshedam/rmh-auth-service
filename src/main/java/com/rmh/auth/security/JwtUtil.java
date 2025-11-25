@@ -8,13 +8,13 @@ import org.springframework.stereotype.Component;
 import java.security.Key;
 import java.util.Date;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Component
 public class JwtUtil {
 
     private final Key key;
     private final long accessTokenExpiryMillis;
+    private final long accessTokenExpirySeconds;
 
     public JwtUtil(
         @Value("${jwt.secret}") String secret,
@@ -24,6 +24,7 @@ public class JwtUtil {
             throw new IllegalStateException("JWT secret must be configured and at least 64 characters");
         }
         this.key = Keys.hmacShaKeyFor(secret.getBytes());
+        this.accessTokenExpirySeconds = accessSeconds;
         this.accessTokenExpiryMillis = accessSeconds * 1000;
     }
 
@@ -47,7 +48,11 @@ public class JwtUtil {
         }
     }
 
-    public String getUsernameFromToken(String token){
+    public String getSubjectFromToken(String token){
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().getSubject();
+    }
+
+    public long getAccessTokenExpirySeconds() {
+        return accessTokenExpirySeconds;
     }
 }
