@@ -9,6 +9,9 @@ import com.rmh.auth.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class UserService {
 
@@ -22,6 +25,21 @@ public class UserService {
     public UserProfileResponse getCurrentUserProfile(String email) {
         User user = findActiveUser(email);
         return toProfileResponse(user);
+    }
+
+    @Transactional(readOnly = true)
+    public UserProfileResponse getUserProfileById(Long id) {
+        User user = userRepository.findByIdAndActiveTrue(id)
+                .orElseThrow(() -> new NotFoundException("User not found"));
+        return toProfileResponse(user);
+    }
+
+    @Transactional(readOnly = true)
+    public List<UserProfileResponse> searchUsersByNameRegex(String regexPattern) {
+        List<User> users = userRepository.findActiveUsersByNameRegex(regexPattern);
+        return users.stream()
+                .map(this::toProfileResponse)
+                .collect(Collectors.toList());
     }
 
     @Transactional
