@@ -7,7 +7,7 @@ import java.time.Instant;
 @Table(name = "refresh_tokens", indexes = {
     @Index(name = "idx_refresh_token", columnList = "token")
 })
-public class RefreshToken {
+public class RefreshToken extends BaseAuditableEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
